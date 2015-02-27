@@ -34,8 +34,8 @@
         <activity
             android:name=".activities.MainActivity"
             android:label="@string/title_activity_main"
-            android:screenOrientation="landscape"
-            android:parentActivityName=".activities.BaseActivity" >
+            android:parentActivityName=".activities.BaseActivity"
+            android:screenOrientation="landscape" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.supwisdom.activities.BaseActivity" />
@@ -49,6 +49,14 @@
         <activity
             android:name=".activities.ReadCardActivity"
             android:label="@string/title_activity_readcard" >
+        </activity>
+        <activity
+            android:name=".activities.SetActivity"
+            android:label="@string/title_activity_set"
+            android:parentActivityName=".activities.BaseActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.supwisdom.activities.BaseActivity" />
         </activity>
     </application>
 

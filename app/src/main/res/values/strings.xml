@@ -19,5 +19,7 @@
     <string name="wait_msg">请刷卡</string>
     <string name="menu_name_set">设置</string>
     <string name="menu_name_purchase">消费</string>
+    <string name="title_activity_set">SetActivity</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>

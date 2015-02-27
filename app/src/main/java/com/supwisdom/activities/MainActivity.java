@@ -22,11 +22,6 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        // 设置屏幕没有标题
-//        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        // 去掉标题栏
-//        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
         InitData();
         InitView();
@@ -44,6 +39,16 @@ public class MainActivity extends ActionBarActivity {
             public void onClick(View view) {
                 Intent intent = createIntentWithTag();
                 intent.setClass(MainActivity.this, ReadCardActivity.class);
+                startActivity(intent);
+            }
+        });
+        //设置
+        btn = (ImageView) findViewById(R.id.iv_set);
+        btn.setOnClickListener(new ImageView.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = createIntentWithTag();
+                intent.setClass(MainActivity.this, SetActivity.class);
                 startActivity(intent);
             }
         });
