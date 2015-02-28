@@ -58,6 +58,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.supwisdom.activities.BaseActivity" />
         </activity>
+        <activity
+            android:name=".activities.RequestCardActivity"
+            android:label="@string/title_activity_request_card"
+            android:parentActivityName=".activities.BaseActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.supwisdom.activities.BaseActivity" />
+        </activity>
     </application>
 
 </manifest>

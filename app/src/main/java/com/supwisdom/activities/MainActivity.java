@@ -38,7 +38,7 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = createIntentWithTag();
-                intent.setClass(MainActivity.this, ReadCardActivity.class);
+                intent.setClass(MainActivity.this, RequestCardActivity.class);
                 startActivity(intent);
             }
         });
