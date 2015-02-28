@@ -41,6 +41,14 @@
             android:id="@+id/et_expiredate"
             android:layout_gravity="center_horizontal"
             android:text="有效期:" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/et_balance"
+            android:layout_gravity="center_horizontal"
+            android:text="余额:"
+            android:singleLine="true"
+            android:inputType="numberDecimal" />
 
         <EditText
             android:layout_width="match_parent"
@@ -67,7 +75,11 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="输金额"
+            android:id="@+id/btn_input_amount" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

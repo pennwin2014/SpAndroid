@@ -42,6 +42,11 @@ public final class CardCommand {
 
     public static final String CMD_DEBIT_FOR_PURCHASE = "ep_debit4purchase";
 
+    /**
+     * 取随机数
+     */
+    public static final String CMD_GET_MAC1 = "get_randnum";
+
 	/**
 	 * APDU指令返回状态码
 	 */

@@ -4,38 +4,29 @@ import android.content.Intent;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.os.Parcelable;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.text.Editable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.supwisdom.R;
-import com.supwisdom.cardlib.CardCommand;
 import com.supwisdom.cardlib.CardException;
 import com.supwisdom.cardlib.CardNotSupportException;
-import com.supwisdom.cardlib.CardRecord;
 import com.supwisdom.cardlib.CardValueException;
 import com.supwisdom.cardlib.EcardLib;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class ReadCardActivity extends BaseActivity {
 
     private static final String tag = "com.supwisdom.activities.readcard";
+
+    private EcardLib globalCard;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +44,8 @@ public class ReadCardActivity extends BaseActivity {
                 //扣费
                 Toast.makeText(ReadCardActivity.this, "消费成功!!",
                         Toast.LENGTH_SHORT).show();
-                showRequestCard();
+                doPurchaseCard(globalCard);
+                //showRequestCard();
             }
         });
         //返回按钮
@@ -66,6 +58,24 @@ public class ReadCardActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
+        //输金额按钮
+        btn = (Button)findViewById(R.id.btn_input_amount);
+        btn.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showReadCard();
+                EditText et = (EditText)findViewById(R.id.et_money);
+                et.setFocusable(true);
+                et.requestFocus();
+            }
+        });
+    }
+
+    private void doPurchaseCard(EcardLib card) {
+        int amount = 0;
+        EditText et = (EditText)findViewById(R.id.et_money);
+        amount = (int)Math.ceil(Float.valueOf(et.getText().toString())*100.0);
+        card.purchase(amount);
     }
 
 
@@ -78,10 +88,10 @@ public class ReadCardActivity extends BaseActivity {
             return;
         }
 
-        EcardLib card = YktSession.getInstance().testAndGetDefaultCardLib();
-        if (card != null) {
-            doReadCard(card);
-        }
+//        EcardLib card = YktSession.getInstance().testAndGetDefaultCardLib();
+//        if (card != null) {
+//            doReadCard(card);
+//        }
     }
 
 
@@ -96,14 +106,15 @@ public class ReadCardActivity extends BaseActivity {
 
             if (nfcTag != null) {
                 Tag t = (Tag) nfcTag;
-                EcardLib card = YktSession.getInstance().createFromTag(t);
-                if (null == card) {
+                //EcardLib
+                globalCard = YktSession.getInstance().createFromTag(t);
+                if (null == globalCard) {
                     Toast.makeText(this, "Cannot initialize card object",
                             Toast.LENGTH_SHORT).show();
                     return;
                 }
                 showReadCard();
-                doReadCard(card);
+                doReadCard(globalCard);
             } else {
                 Toast.makeText(this, "Not ISO14443-A card", Toast.LENGTH_LONG)
                         .show();
@@ -115,6 +126,8 @@ public class ReadCardActivity extends BaseActivity {
         //隐藏寻卡界面
         TextView tv = (TextView)findViewById(R.id.tv_requestcard);
         tv.setVisibility(View.INVISIBLE);
+        Button btn = (Button)findViewById(R.id.btn_input_amount);
+        btn.setVisibility(View.INVISIBLE);
         //显示读卡界面
         EditText et = (EditText)findViewById(R.id.et_name);
         et.setVisibility(View.VISIBLE);
@@ -126,7 +139,10 @@ public class ReadCardActivity extends BaseActivity {
         et.setVisibility(View.VISIBLE);
         et = (EditText)findViewById(R.id.et_money);
         et.setVisibility(View.VISIBLE);
-        Button btn = (Button)findViewById(R.id.btn_purchase);
+        et = (EditText)findViewById(R.id.et_balance);
+        et.setVisibility(View.VISIBLE);
+        //按钮
+        btn = (Button)findViewById(R.id.btn_purchase);
         btn.setVisibility(View.VISIBLE);
         btn = (Button)findViewById(R.id.btn_back);
         btn.setVisibility(View.VISIBLE);
@@ -136,6 +152,8 @@ public class ReadCardActivity extends BaseActivity {
         //隐藏寻卡界面
         TextView tv = (TextView)findViewById(R.id.tv_requestcard);
         tv.setVisibility(View.VISIBLE);
+        Button btn = (Button)findViewById(R.id.btn_input_amount);
+        btn.setVisibility(View.VISIBLE);
         //显示读卡界面
         EditText et = (EditText)findViewById(R.id.et_name);
         et.setVisibility(View.INVISIBLE);
@@ -147,8 +165,10 @@ public class ReadCardActivity extends BaseActivity {
         et.setVisibility(View.INVISIBLE);
         et = (EditText)findViewById(R.id.et_money);
         et.setVisibility(View.INVISIBLE);
+        et = (EditText)findViewById(R.id.et_balance);
+        et.setVisibility(View.INVISIBLE);
         //
-        Button btn = (Button)findViewById(R.id.btn_purchase);
+        btn = (Button)findViewById(R.id.btn_purchase);
         btn.setVisibility(View.INVISIBLE);
         btn = (Button)findViewById(R.id.btn_back);
         btn.setVisibility(View.INVISIBLE);
@@ -164,7 +184,7 @@ public class ReadCardActivity extends BaseActivity {
             card.setFieldRead(EcardLib.FIELD_CARDNO);
 
             card.readCard();
-
+            String cardBalance = card.getFieldValue(EcardLib.FIELD_BALANCE);
             String custName = card.getFieldValue(EcardLib.FIELD_CUSTNAME);
             String stuEmpNo = card.getFieldValue(EcardLib.FIELD_STUEMPNO);
             String expireDate = card.getFieldValue(EcardLib.FIELD_EXPIREDATE);
@@ -181,6 +201,9 @@ public class ReadCardActivity extends BaseActivity {
 
             et = (EditText)findViewById(R.id.et_expiredate);
             et.setText("有效期:     "+expireDate);
+
+            et = (EditText)findViewById(R.id.et_balance);
+            et.setText("余额:      "+cardBalance);
 
         } catch (IOException e) {
             Log.e(tag, "Connect to card , " + e);

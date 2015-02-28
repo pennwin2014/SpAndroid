@@ -533,4 +533,5 @@ public abstract class EcardLib {
 
     public abstract boolean testConnectionOk();
 
+    public abstract int purchase(int amount);
 }

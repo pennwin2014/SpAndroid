@@ -4,11 +4,17 @@ import android.nfc.Tag;
 import android.nfc.tech.IsoDep;
 import android.util.Log;
 
+import com.supwisdom.swpos.ErrorDef;
+
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Hashtable;
+
+import com.supwisdom.swpos.PsamCard;
 
 /**
  * Copyright (C), 2000-2013, Supwisdom Co., Ltd. File name:
@@ -628,5 +634,56 @@ public class CpuCardLib extends EcardLib {
             return false;
         }
 
+    }
+
+    @Override
+    public int purchase(int amount){
+        CardCommand request = new CardCommand();
+        CardCommand response = new CardCommand();
+        PsamCard.initCard(1);
+        request.setParameter("amount", amount);
+        request.setParameter("samno", PsamCard.getSamno());
+        //step1
+        try {
+            executeCardCommand(CardCommand.CMD_INIT_FOR_PURCHASE, request, response);
+        }
+        catch(IOException e){
+            Log.i(tag, "消费初始化失败"+e.getMessage());
+            return ErrorDef.SP_INIT_FOR_PURCHASE_FAIL;
+        }
+        int paycnt = response.getParameterInt("paycnt");
+        String random_num = response.getParameterString("random_num");
+        Date now = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        String devtime = dateFormat.format( now );
+        //step2
+        try {
+            request.setParameter("paycnt", paycnt);
+            request.setParameter("pay_random", random_num);
+            request.setParameter("devtime", devtime);
+            request.setParameter("key_index", 6);
+            PsamCard.executePsamCommand(CardCommand.CMD_GET_MAC1, request, response);
+        }
+        catch(IOException e){
+            Log.i(tag, "获取mac1失败"+e.getMessage());
+            return ErrorDef.SP_GET_MAC1_FAIL;
+        }
+        int samSeqno = response.getParameterInt("samSeqno");
+        String mac1 = response.getParameterString("mac1");
+        //step3:消费确认
+        String termDate = null;
+        String termTime = null;
+        request.setParameter("samSeqno", samSeqno);
+        request.setParameter("mac1", mac1);
+        request.setParameter("termDate", termDate);
+        request.setParameter("termTime", termTime);
+        try {
+            executeCardCommand(CardCommand.CMD_DEBIT_FOR_PURCHASE, request, response);
+        }
+        catch(IOException e){
+            Log.i(tag, "消费确认失败"+e.getMessage());
+            return ErrorDef.SP_DEBI_FOR_PURCHASE_FAIL;
+        }
+        return ErrorDef.SP_SUCCESS;
     }
 }

@@ -4,7 +4,7 @@
     <string name="app_name">SpAndroid</string>
     <string name="title_activity_base">BaseActivity</string>
     <string name="action_settings">设置</string>
-    <string name="title_activity_main">主页</string>
+    <string name="title_activity_main">树维POS</string>
     <string name="title_activity_readcard">读卡</string>
     <string name="app_ykt_url">http://source.supwisdom.com:8080/yktapi/services</string>
     <string name="cardlib_name">supwisdom.kscpucard</string>
@@ -20,6 +20,7 @@
     <string name="menu_name_set">设置</string>
     <string name="menu_name_purchase">消费</string>
     <string name="title_activity_set">SetActivity</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="hello_world">设置</string>
+    <string name="devtimefmt">yyyyMMddHHmmss</string>
 
 </resources>
