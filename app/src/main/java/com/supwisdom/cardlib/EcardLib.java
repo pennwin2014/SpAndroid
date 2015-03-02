@@ -2,6 +2,8 @@ package com.supwisdom.cardlib;
 
 import android.nfc.Tag;
 
+import com.supwisdom.utilities.ErrorInfo;
+
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -533,5 +535,5 @@ public abstract class EcardLib {
 
     public abstract boolean testConnectionOk();
 
-    public abstract int purchase(int amount);
+    public abstract ErrorInfo purchase(int amount);
 }

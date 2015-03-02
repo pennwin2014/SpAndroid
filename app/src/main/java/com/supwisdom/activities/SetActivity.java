@@ -11,7 +11,7 @@ import android.widget.ImageView;
 
 import com.supwisdom.R;
 
-public class SetActivity extends ActionBarActivity {
+public class SetActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

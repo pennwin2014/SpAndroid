@@ -1,4 +1,4 @@
-package com.supwisdom.swpos;
+package com.supwisdom.utilities;
 
 import android.util.Log;
 
@@ -36,7 +36,9 @@ public class PsamCard {
         String pay_random = request.getParameterString("pay_random");
         String devtime = request.getParameterString("devtime");
         int key_index = request.getParameterInt("key_index");
-        String apduCmd = String.format("807000001C%s%04x%08x06%s%02x00", pay_random, paycnt, amount, devtime, key_index);
+        String cardphyid = request.getParameterString("cardphyid");
+        String apduCmd = String.format("807000001C%s%04x%08x06%s%02x00%s80000000", pay_random, paycnt, amount, devtime, key_index,
+                cardphyid);
         try {
             byte [] result = psamCommand(EcardUtils.decodeHex(apduCmd));
             if(null == result){

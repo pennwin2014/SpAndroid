@@ -17,7 +17,7 @@ import com.supwisdom.R;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
