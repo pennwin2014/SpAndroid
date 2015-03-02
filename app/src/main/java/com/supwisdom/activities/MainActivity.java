@@ -52,6 +52,17 @@ public class MainActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
+        //查询流水
+        btn = (ImageView) findViewById(R.id.iv_showtransdtl);
+        btn.setOnClickListener(new ImageView.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = createIntentWithTag();
+                intent.setClass(MainActivity.this, TransdtlActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     /**

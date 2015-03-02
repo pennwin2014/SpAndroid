@@ -16,8 +16,12 @@ import com.supwisdom.cardlib.CardException;
 import com.supwisdom.cardlib.CardNotSupportException;
 import com.supwisdom.cardlib.CardValueException;
 import com.supwisdom.cardlib.EcardLib;
+import com.supwisdom.db.BeanPropEnum;
+import com.supwisdom.db.TransdtlDao;
+import com.supwisdom.swpos.TransNo;
 import com.supwisdom.utilities.ErrorDef;
 import com.supwisdom.utilities.ErrorInfo;
+import com.supwisdom.utilities.TransRecord;
 
 import java.io.IOException;
 
@@ -25,7 +29,7 @@ public class ReadCardActivity extends BaseActivity {
 
     private static final String tag = "com.supwisdom.activities.readcard";
 
-   // private EcardLib globalCard;
+    private TransdtlDao transdtlDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,16 +39,28 @@ public class ReadCardActivity extends BaseActivity {
     }
 
     private void InitView() {
+        transdtlDao = transdtlDao.getInstance(this);
         //消费按钮
         Button btn = (Button)findViewById(R.id.btn_purchase);
         btn.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ErrorInfo ret = doPurchaseCard(globalCard);
+                TransRecord record = new TransRecord();
+                ErrorInfo ret = initTransdtl(record);
+                if(ret != ErrorDef.SP_SUCCESS){
+                    Toast.makeText(ReadCardActivity.this, "操作数据库失败,错误码["+Integer.toHexString(ret.errorCode)+"]", Toast.LENGTH_SHORT).show();
+                }
+                ret = doPurchaseCard(globalCard);
                 if(ErrorDef.SP_SUCCESS == ret){
                     Toast.makeText(ReadCardActivity.this, "消费成功", Toast.LENGTH_SHORT).show();
                 }else{
                     Toast.makeText(ReadCardActivity.this, "消费失败,错误码["+Integer.toHexString(ret.errorCode)+"]", Toast.LENGTH_SHORT).show();
+                }
+                //根据读到的卡和交易类型来设置交易类别
+                record.setTransFlag(getTransFlagByErrorCode(ret.errorCode));
+                ret = confirmTransdtl(record);
+                if(ErrorDef.SP_SUCCESS != ret){
+                    Toast.makeText(ReadCardActivity.this, "操作数据库失败,错误码["+Integer.toHexString(ret.errorCode)+"]", Toast.LENGTH_SHORT).show();
                 }
                 //showRequestCard();
             }
@@ -70,6 +86,25 @@ public class ReadCardActivity extends BaseActivity {
                 et.requestFocus();
             }
         });
+    }
+
+    private int getTransFlagByErrorCode(int errorCode) {
+        return 0;
+    }
+
+    private ErrorInfo confirmTransdtl(TransRecord record) {
+        try {
+            record.setTac(globalCard.getFieldValue("tac"));
+        } catch (CardException e) {
+            e.printStackTrace();
+        }
+        return ErrorDef.SP_SUCCESS;
+    }
+
+    private ErrorInfo initTransdtl(TransRecord record) {
+        record.setTransNo(TransNo.generateTransNo(this));
+        transdtlDao.saveTransdtl(record);
+        return ErrorDef.SP_SUCCESS;
     }
 
     private ErrorInfo doPurchaseCard(EcardLib card) {

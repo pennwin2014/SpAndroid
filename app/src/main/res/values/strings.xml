@@ -22,5 +22,6 @@
     <string name="title_activity_set">SetActivity</string>
     <string name="hello_world">设置</string>
     <string name="devtimefmt">yyyyMMddHHmmss</string>
+    <string name="title_activity_transdtl">TransdtlActivity</string>
 
 </resources>

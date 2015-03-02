@@ -9,9 +9,10 @@ public class DBHelper extends SQLiteOpenHelper {
     /**
      * table
      */
+    public static final String TABLE_NAME_TRANSDTL = "tb_transdtl";
     public static final String TABLE_NAME_USER = "tb_user";
     public static final String TABLE_NAME_KEYVALUE = "tb_mapkey";
-    private static final String DB_NAME = "supwisdom.epaycampus.db";
+    private static final String DB_NAME = "supwisdom.swpos3.db";
     /**
      * version
      */
@@ -19,6 +20,19 @@ public class DBHelper extends SQLiteOpenHelper {
     /**
      * SQL for create table
      */
+    private static final String CREATE_TABLE_TRANSDTL = "create table IF NOT EXISTS  "
+            + TABLE_NAME_TRANSDTL
+            + "( " + BeanPropEnum.Transdtl.transNo + " integer primary key,"
+            + BeanPropEnum.Transdtl.cardNo + " integer,"
+            + BeanPropEnum.Transdtl.lastTransCount + " integer,"
+            + BeanPropEnum.Transdtl.lastLimitAmount + "  integer,"
+            + BeanPropEnum.Transdtl.lastAmount + " integer," + BeanPropEnum.Transdtl.lastTransFlag + " integer,"
+            + BeanPropEnum.Transdtl.lastTermno + " varchar(6)," + BeanPropEnum.Transdtl.lastDatetime + "  varchar(6),"
+            + BeanPropEnum.Transdtl.cardBeforeBalance + " integer," + BeanPropEnum.Transdtl.cardBeforeCount + " integer,"
+            + BeanPropEnum.Transdtl.amount + " integer," + BeanPropEnum.Transdtl.extraAmount + " integer,"
+            + BeanPropEnum.Transdtl.transDatatime + " varchar(6)," + BeanPropEnum.Transdtl.samNo + " varchar(6),"
+            + BeanPropEnum.Transdtl.tac + " varchar(4)," + BeanPropEnum.Transdtl.transFlag + " integer,"
+            + BeanPropEnum.Transdtl.reserve + " varchar(2)," + BeanPropEnum.Transdtl.crc + " varchar(2) )";
     private static final String CREATE_TABLE_USER = "create table IF NOT EXISTS  "
             + TABLE_NAME_USER
             + "( " + BeanPropEnum.LocalUserProp.uid + " varchar(100) primary key,"
@@ -50,6 +64,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE_USER);
         db.execSQL(CREATE_TABLE_KEYVALUE);
+        db.execSQL(CREATE_TABLE_TRANSDTL);
     }
 
     @Override

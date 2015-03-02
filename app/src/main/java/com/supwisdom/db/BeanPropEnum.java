@@ -30,4 +30,25 @@ public class BeanPropEnum {
         schoolcode,
         secretkey
     }
+
+    public enum Transdtl {
+        transNo,
+        cardNo,
+        lastTransCount,
+        lastLimitAmount,
+        lastAmount,
+        lastTransFlag,
+        lastTermno,
+        lastDatetime,
+        cardBeforeBalance,
+        cardBeforeCount,
+        amount,
+        extraAmount,
+        transDatatime,
+        samNo,
+        tac,
+        transFlag,
+        reserve,
+        crc
+    }
 }
